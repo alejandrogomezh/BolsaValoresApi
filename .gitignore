@@ -1,0 +1,23 @@
+*.class
+*.log
+.history
+ 
+# sbt specific
+dist/*
+native/
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+logs/
+ 
+#
+.cache
+.classpath
+.project
+.settings/
+ 
+.idea/
+.idea_modules/
+
