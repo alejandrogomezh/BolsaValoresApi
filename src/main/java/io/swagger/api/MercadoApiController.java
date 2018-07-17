@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -47,14 +48,16 @@ public class MercadoApiController implements MercadoApi {
 
     public ResponseEntity<Mercado> buscarMercado(@ApiParam(value = "Id del mercado a buscar",required=true) @PathVariable("idMercado") String idMercado) {
         //DTO
-        Mercado mercado = new Mercado();
-        mercado.setIdMercado("Mercado 1");
+        Mercado mercado = Utiles.listaMercado()
+                .stream().filter(m -> m.getIdMercado().equals(idMercado))
+                .findFirst()
+                .get();
 
         mercado.add(linkTo(PortafolioApi.class).slash(mercado.getIdMercado()).withSelfRel());
 
         //Asignar referencia a cotejos
         List<Inversion> linkBuilder = methodOn(PortafolioApiController.class).listarInversiones(mercado.getIdMercado());
-        Link cotejosLink = linkTo(linkBuilder).withRel("todosCotejos");
+        Link cotejosLink = linkTo(linkBuilder).withRel("todosPortafolios");
         mercado.add(cotejosLink);
 
         //Headers
@@ -71,9 +74,12 @@ public class MercadoApiController implements MercadoApi {
     }
 
     public @ResponseBody List<Portafolio> listarPortafolio(@PathVariable("idMercado") String idMercado){
-        List<Portafolio> lstResponse = Utiles.listaPortafolio();
+        List<Portafolio> lstResponse = Utiles.listaPortafolio()
+                .stream().filter(m -> m.getIdMercado().equals(idMercado))
+                .collect(Collectors.toList());
+
         for(Portafolio portafolio:lstResponse){
-            Link portafolioLink = linkTo(Portafolio.class).slash(portafolio.getIdPortafolio()).withSelfRel();
+            Link portafolioLink = linkTo(Portafolio.class).slash("portafolio").slash(portafolio.getIdPortafolio()).withSelfRel();
             portafolio.add(portafolioLink);
         }
         return lstResponse;

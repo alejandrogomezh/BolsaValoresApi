@@ -1,7 +1,5 @@
 package io.swagger.builder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.model.Mercado;
 import io.swagger.model.Portafolio;
 
@@ -9,72 +7,48 @@ import io.swagger.model.Portafolio;
  * @author luiscocr
  *
  */
-public class PortafolioBuilder {
+public class MercadoBuilder {
+    private String idMercado = null;
+    private String nombre = null;
+    private String sector = null;
+    private String descripcion = null;
 
-    private String idPortafolio;
-    private String idMercado;
-    private String nombre;
-    private Integer rentabilidad;
-    private Integer cantidadAcciones;
-    private Integer valorAccion;
-    private String estado;
-    private Mercado mercado;
-
-    public PortafolioBuilder() {
+    public MercadoBuilder() {
     }
 
-    public PortafolioBuilder(String idPortafolio, String idMercado, String nombre, Integer rentabilidad,
-                             Integer cantidadAcciones, Integer valorAccion, String estado) {
-        this.idPortafolio = idPortafolio;
+    public MercadoBuilder(String idMercado, String nombre, String sector, String descripcion) {
         this.idMercado = idMercado;
         this.nombre = nombre;
-        this.rentabilidad = rentabilidad;
-        this.cantidadAcciones = cantidadAcciones;
-        this.valorAccion = valorAccion;
-        this.estado = estado;
+        this.sector = sector;
+        this.descripcion = descripcion;
     }
 
-    public PortafolioBuilder withIdPortafolio(String idPortafolio) {
-        this.idPortafolio = idPortafolio;
-        return this;
-    }
-    public PortafolioBuilder withIdMercado(String idMercado) {
+    public MercadoBuilder conIdMercado(String idMercado) {
         this.idMercado = idMercado;
         return this;
     }
-    public PortafolioBuilder withNombre(String nombre) {
+
+    public MercadoBuilder conNombre(String nombre) {
         this.nombre = nombre;
         return this;
     }
-    public PortafolioBuilder withRentabilidad(Integer rentabilidad) {
-        this.rentabilidad = rentabilidad;
-        return this;
-    }
-    public PortafolioBuilder withCantidadAcciones(Integer cantidadAcciones) {
-        this.cantidadAcciones = cantidadAcciones;
-        return this;
-    }
-    public PortafolioBuilder withValorAccion(Integer valorAccion) {
-        this.valorAccion = valorAccion;
-        return this;
-    }
-    public PortafolioBuilder withEstado(String estado) {
-        this.estado = estado;
+
+    public MercadoBuilder conSector(String sector) {
+        this.sector = sector;
         return this;
     }
 
-    public Portafolio build() {
-        Portafolio portafolio = new Portafolio();
-
-        portafolio.setIdPortafolio(this.idPortafolio);
-        portafolio.setIdMercado(this.idMercado);
-        portafolio.setNombre(this.nombre);
-        portafolio.setRentabilidad(this.rentabilidad);
-        portafolio.setCantidadAcciones(this.cantidadAcciones);
-        portafolio.setValorAccion(this.valorAccion);
-        portafolio.setEstado(this.estado);
-
-        return portafolio;
+    public MercadoBuilder conDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+        return this;
     }
 
+    public Mercado builder(){
+        Mercado mercado = new Mercado();
+        mercado.setIdMercado(idMercado);
+        mercado.setNombre(nombre);
+        mercado.setSector(sector);
+        mercado.setDescripcion(descripcion);
+        return mercado;
+    }
 }

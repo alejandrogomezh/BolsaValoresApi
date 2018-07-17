@@ -34,29 +34,36 @@ public class PortafolioBuilder {
         this.estado = estado;
     }
 
-    public void withIdPortafolio(String idPortafolio) {
+    public PortafolioBuilder conIdPortafolio(String idPortafolio) {
         this.idPortafolio = idPortafolio;
+        return this;
     }
-    public void withIdMercado(String idMercado) {
+    public PortafolioBuilder conIdMercado(String idMercado) {
         this.idMercado = idMercado;
+        return this;
     }
-    public void withNombre(String nombre) {
+    public PortafolioBuilder conNombre(String nombre) {
         this.nombre = nombre;
+        return this;
     }
-    public void withRentabilidad(Integer rentabilidad) {
+    public PortafolioBuilder conRentabilidad(Integer rentabilidad) {
         this.rentabilidad = rentabilidad;
+        return this;
     }
-    public void withCantidadAcciones(Integer cantidadAcciones) {
+    public PortafolioBuilder conCantidadAcciones(Integer cantidadAcciones) {
         this.cantidadAcciones = cantidadAcciones;
+        return this;
     }
-    public void withValorAccion(Integer valorAccion) {
+    public PortafolioBuilder conValorAccion(Integer valorAccion) {
         this.valorAccion = valorAccion;
+        return this;
     }
-    public void withEstado(String estado) {
+    public PortafolioBuilder conEstado(String estado) {
         this.estado = estado;
+        return this;
     }
 
-    public Portafolio buildProtafolio() {
+    public Portafolio build() {
         Portafolio portafolio = new Portafolio();
 
         portafolio.setIdPortafolio(this.idPortafolio);

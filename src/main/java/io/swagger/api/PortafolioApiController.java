@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -44,21 +45,17 @@ public class PortafolioApiController implements PortafolioApi {
 
     public ResponseEntity<Portafolio> buscarPortafolio(@ApiParam(value = "Id del portafolio a buscar",required=true) @PathVariable("idPortafolio") String idPortafolio) {
         //DTO
-        Portafolio portafolio = new Portafolio();
-        portafolio.idPortafolio(idPortafolio);
-        portafolio.setNombre("Portafolio 1");
-        portafolio.setRentabilidad(58);
-        portafolio.setCantidadAcciones(15);
-        portafolio.setEstado("Abierto");
-        portafolio.setValorAccion(9500000);
-        portafolio.setIdMercado("Mercado 1");
+        Portafolio portafolio = Utiles.listaPortafolio()
+                .stream().filter(m -> m.getIdPortafolio().equals(idPortafolio))
+                .findFirst()
+                .get();
 
         portafolio.add(linkTo(PortafolioApi.class).slash(portafolio.getIdPortafolio()).withSelfRel());
 
         //Asignar referencia a cotejos
         List<Inversion> linkBuilder = methodOn(PortafolioApiController.class).listarInversiones(portafolio.getIdPortafolio());
-        Link cotejosLink = linkTo(linkBuilder).withRel("todosCotejos");
-        portafolio.add(cotejosLink);
+        Link inversionesLink = linkTo(linkBuilder).withRel("todasInversiones");
+        portafolio.add(inversionesLink);
 
         //Headers
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -74,9 +71,11 @@ public class PortafolioApiController implements PortafolioApi {
     }
 
     public @ResponseBody List<Inversion> listarInversiones(@PathVariable("idPortafolio") String idPortafolio){
-        List<Inversion> lstResponse = Utiles.listaInversiones();
+        List<Inversion> lstResponse = Utiles.listaInversiones()
+                .stream().filter(m -> m.getIdPortafolio().equals(idPortafolio))
+                .collect(Collectors.toList());
         for(Inversion inversion:lstResponse){
-            Link inversionLink = linkTo(Inversion.class).slash(inversion.getIdInversion()).withSelfRel();
+            Link inversionLink = linkTo(Inversion.class).slash("inversion").slash(inversion.getIdInversion()).withSelfRel();
             inversion.add(inversionLink);
         }
         return lstResponse;

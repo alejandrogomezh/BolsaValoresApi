@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.configuration.Utiles;
 import io.swagger.model.Inversion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -37,10 +38,10 @@ public class InversionApiController implements InversionApi {
 
     public ResponseEntity<Inversion> buscarInversion(@ApiParam(value = "Id de la inversión a buscar",required=true) @PathVariable("idInversion") String idInversion) {
         //DTO
-        Inversion inversion = new Inversion();
-        inversion.idInversion(idInversion);
-        inversion.setCantidadAcciones(45);
-        inversion.setIdPortafolio("Portafolio 1");
+        Inversion inversion = Utiles.listaInversiones()
+                .stream().filter(m -> m.getIdInversion().equals(idInversion))
+                .findFirst()
+                .get();
 
         //Headers
         HttpHeaders responseHeaders = new HttpHeaders();

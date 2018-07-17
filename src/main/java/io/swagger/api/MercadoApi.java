@@ -62,7 +62,7 @@ public interface MercadoApi {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "devolver el resultado obtenido", response = Object.class),
             @ApiResponse(code = 400, message = "parametro incorrecto") })
-    @RequestMapping(value = "/{idMercado}/portafolio",
+    @RequestMapping(value = "/{idMercado}/portafolios",
             produces = { "application/json" },
             method = RequestMethod.GET)
     List<Portafolio> listarPortafolio(@ApiParam(value = "id mercado a listar",required=true) @PathVariable("idMercado") String idMercado);
