@@ -32,11 +32,11 @@ public interface MercadoApi {
         @ApiResponse(code = 201, message = "Recurso creado"),
         @ApiResponse(code = 400, message = "Parámetro inválido"),
         @ApiResponse(code = 409, message = "Recurso ya existente") })
-    @RequestMapping(value = "/{idMercado}",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> agregarMercado(@ApiParam(value = "Id del mercado a agregar",required=true) @PathVariable("idMercado") String idMercado,@ApiParam(value = "Mercado a agregar"  )  @Valid @RequestBody Mercado mercado);
+    ResponseEntity<Mercado> agregarMercado(@ApiParam(value = "Mercado a agregar"  )  @Valid @RequestBody Mercado mercado);
 
 
     @ApiOperation(value = "Buscar un mercado", nickname = "buscarMercado", notes = "Enviando un id válido retorna la información de un mercado ", response = Object.class, tags={ "administrador","emisor", })

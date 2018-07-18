@@ -18,7 +18,6 @@ public class PortafolioBuilder {
     private Integer cantidadAcciones;
     private Integer valorAccion;
     private String estado;
-    private Mercado mercado;
 
     public PortafolioBuilder() {
     }

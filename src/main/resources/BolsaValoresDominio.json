@@ -1,0 +1,50 @@
+[
+	{
+		"idMercado": "m1",
+		"nombre": "mercado 1",
+		"descripcion": "mercado 1",
+		"sector": "agricola",
+		"portafolio": [ 
+			{
+				"idPortafolio": "p1",
+				"idMercado": "m1",
+				"nombre": "Portafolio 1",
+				"cantidadAcciones": 23,
+				"estado": "Abierto",
+				"rentabilidad": 10,
+				"valorAccion": 100000,
+				"inversion": [
+					{
+						"idInversion": "i1",
+						"idPortafolio": "p1",
+						"cantidadAcciones": 11
+					}
+				]
+			}
+		]
+	},
+	{
+		"idMercado": "m2",
+		"nombre": "mercado 1",
+		"descripcion": "mercado 1",
+		"sector": "agricola",
+		"portafolio": [ 
+			{
+				"idPortafolio": "p1",
+				"idMercado": "m1",
+				"nombre": "Portafolio 1",
+				"cantidadAcciones": 23,
+				"estado": "Abierto",
+				"rentabilidad": 10,
+				"valorAccion": 100000,
+				"inversion": [
+					{
+						"idInversion": "i1",
+						"idPortafolio": "p1",
+						"cantidadAcciones": 11
+					}
+				]
+			}
+		]
+	}
+]

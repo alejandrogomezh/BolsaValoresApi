@@ -31,11 +31,11 @@ public interface InversionApi {
         @ApiResponse(code = 201, message = "Recurso creado"),
         @ApiResponse(code = 400, message = "Parámetro inválido"),
         @ApiResponse(code = 409, message = "Recurso ya existente") })
-    @RequestMapping(value = "/{idInversion}",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> agregarInversion(@ApiParam(value = "Id de la inversión a agregar",required=true) @PathVariable("idInversion") String idInversion,@ApiParam(value = "Inversión a agregar"  )  @Valid @RequestBody Inversion inversion);
+    ResponseEntity<Inversion> agregarInversion(@ApiParam(value = "Inversión a agregar"  )  @Valid @RequestBody Inversion inversion);
 
 
     @ApiOperation(value = "Buscar una inversión", nickname = "buscarInversion", notes = "Enviando un id válido retorna la información de una inversión ", response = Object.class, tags={ "administrador","emisor","inversor", })

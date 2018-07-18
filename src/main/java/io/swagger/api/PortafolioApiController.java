@@ -1,6 +1,6 @@
 package io.swagger.api;
 
-import io.swagger.configuration.Utiles;
+import io.swagger.dominio.Dominio;
 import io.swagger.model.Inversion;
 import io.swagger.model.Portafolio;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -38,24 +37,25 @@ public class PortafolioApiController implements PortafolioApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> agregarPortafolio(@ApiParam(value = "Id del portafolio a agregar",required=true) @PathVariable("idPortafolio") String idPortafolio,@ApiParam(value = "Portafolio a agregar"  )  @Valid @RequestBody Portafolio portafolio) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Portafolio> agregarPortafolio(@ApiParam(value = "Portafolio a agregar"  )  @Valid @RequestBody Portafolio portafolio) {
+        Dominio.agregarPortafolio(portafolio);
+        return new ResponseEntity<Portafolio>(portafolio, HttpStatus.OK);
     }
 
     public ResponseEntity<Portafolio> buscarPortafolio(@ApiParam(value = "Id del portafolio a buscar",required=true) @PathVariable("idPortafolio") String idPortafolio) {
         //DTO
-        Portafolio portafolio = Utiles.listaPortafolio()
-                .stream().filter(m -> m.getIdPortafolio().equals(idPortafolio))
-                .findFirst()
-                .get();
+        Portafolio portafolio = Dominio.getPortafolio(idPortafolio);
 
-        portafolio.add(linkTo(PortafolioApi.class).slash(portafolio.getIdPortafolio()).withSelfRel());
+        if(portafolio == null){
+            return new ResponseEntity<Portafolio>(HttpStatus.NOT_FOUND);
+        }
 
-        //Asignar referencia a cotejos
-        List<Inversion> linkBuilder = methodOn(PortafolioApiController.class).listarInversiones(portafolio.getIdPortafolio());
+        portafolio.getLinks().clear();
+        portafolio.add(linkTo(PortafolioApi.class).slash(idPortafolio).withSelfRel());
+        List<Inversion> linkBuilder = methodOn(PortafolioApiController.class).listarInversiones(idPortafolio);
         Link inversionesLink = linkTo(linkBuilder).withRel("todasInversiones");
         portafolio.add(inversionesLink);
+
 
         //Headers
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -66,19 +66,29 @@ public class PortafolioApiController implements PortafolioApi {
     }
 
     public ResponseEntity<Void> eliminarPortafolio(@ApiParam(value = "Portafolio a ser eliminado",required=true) @PathVariable("idPortafolio") String idPortafolio) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return Dominio.eliminarPortafolio(idPortafolio)?
+                new ResponseEntity<Void>(HttpStatus.OK)
+                :
+                new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
     }
 
     public @ResponseBody List<Inversion> listarInversiones(@PathVariable("idPortafolio") String idPortafolio){
-        List<Inversion> lstResponse = Utiles.listaInversiones()
-                .stream().filter(m -> m.getIdPortafolio().equals(idPortafolio))
-                .collect(Collectors.toList());
+        List<Inversion> lstResponse = Dominio.listaInversiones(idPortafolio);
         for(Inversion inversion:lstResponse){
-            Link inversionLink = linkTo(Inversion.class).slash("inversion").slash(inversion.getIdInversion()).withSelfRel();
+            inversion.getLinks().clear();
+            Link inversionLink = linkTo(InversionApi.class).slash(inversion.getIdInversion()).withSelfRel();
             inversion.add(inversionLink);
         }
         return lstResponse;
     }
 
+    public @ResponseBody List<Portafolio> consultarInversiones(@PathVariable("valor") Integer valor){
+        List<Portafolio> lstResponse = Dominio.buscarPortafolio(valor);
+        for(Portafolio portafolio:lstResponse){
+            portafolio.getLinks().clear();
+            Link portafolioLink = linkTo(PortafolioApi.class).slash(portafolio.getIdPortafolio()).withSelfRel();
+            portafolio.add(portafolioLink);
+        }
+        return lstResponse;
+    }
 }

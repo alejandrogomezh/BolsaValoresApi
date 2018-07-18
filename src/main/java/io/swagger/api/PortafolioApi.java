@@ -32,18 +32,18 @@ public interface PortafolioApi {
         @ApiResponse(code = 201, message = "Recurso creado"),
         @ApiResponse(code = 400, message = "Parámetro inválido"),
         @ApiResponse(code = 409, message = "Recurso ya existente") })
-    @RequestMapping(value = "/{idPortafolio}",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> agregarPortafolio(@ApiParam(value = "Id del portafolio a agregar",required=true) @PathVariable("idPortafolio") String idPortafolio,@ApiParam(value = "Portafolio a agregar"  )  @Valid @RequestBody Portafolio portafolio);
+    ResponseEntity<Portafolio> agregarPortafolio(@ApiParam(value = "Portafolio a agregar"  )  @Valid @RequestBody Portafolio portafolio);
 
 
     @ApiOperation(value = "Buscar un portafolio", nickname = "buscarPortafolio", notes = "Enviando un id válido retorna la información de un portafolio ", response = Object.class, tags={ "administrador","emisor","inversor", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Recurso obtenido", response = Object.class),
         @ApiResponse(code = 400, message = "Parámetro inválido") })
-    @RequestMapping(value = "/{idPortafolio}",
+    @RequestMapping(value = "/otro/{idPortafolio}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<Portafolio> buscarPortafolio(@ApiParam(value = "Id del portafolio a buscar",required=true) @PathVariable("idPortafolio") String idPortafolio);
@@ -66,4 +66,15 @@ public interface PortafolioApi {
             produces = { "application/json" },
             method = RequestMethod.GET)
     List<Inversion> listarInversiones(@ApiParam(value = "id portafolio a listar",required=true) @PathVariable("idPortafolio") String idPortafolio);
+
+
+
+    @ApiOperation(value = "Buscar portafolio que se ajusten a la inversion", nickname = "consultarPortafolio", notes = " ", response = Object.class, tags={ "administrador","emisor",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "devolver el resultado obtenido", response = Object.class),
+            @ApiResponse(code = 400, message = "parametro incorrecto") })
+    @RequestMapping(value = "/{valorInvertir}",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    List<Portafolio> consultarInversiones(@ApiParam(value = "valor a invertir",required=true) @PathVariable("valorInvertir") Integer valor);
 }

@@ -1,7 +1,6 @@
 package io.swagger.api;
 
-import io.swagger.configuration.Utiles;
-import io.swagger.model.Inversion;
+import io.swagger.dominio.Dominio;
 import io.swagger.model.Mercado;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -14,14 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -41,24 +36,24 @@ public class MercadoApiController implements MercadoApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> agregarMercado(@ApiParam(value = "Id del mercado a agregar",required=true) @PathVariable("idMercado") String idMercado,@ApiParam(value = "Mercado a agregar"  )  @Valid @RequestBody Mercado mercado) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Mercado> agregarMercado(@ApiParam(value = "Mercado a agregar"  )  @Valid @RequestBody Mercado mercado) {
+        Dominio.agregarMercado(mercado);
+        return new ResponseEntity<Mercado>(mercado, HttpStatus.OK);
     }
 
     public ResponseEntity<Mercado> buscarMercado(@ApiParam(value = "Id del mercado a buscar",required=true) @PathVariable("idMercado") String idMercado) {
         //DTO
-        Mercado mercado = Utiles.listaMercado()
-                .stream().filter(m -> m.getIdMercado().equals(idMercado))
-                .findFirst()
-                .get();
+        Mercado mercado = Dominio.getMercado(idMercado);
 
-        mercado.add(linkTo(PortafolioApi.class).slash(mercado.getIdMercado()).withSelfRel());
+        if(mercado == null){
+            return new ResponseEntity<Mercado>(HttpStatus.NOT_FOUND);
+        }
 
-        //Asignar referencia a cotejos
-        List<Inversion> linkBuilder = methodOn(PortafolioApiController.class).listarInversiones(mercado.getIdMercado());
-        Link cotejosLink = linkTo(linkBuilder).withRel("todosPortafolios");
-        mercado.add(cotejosLink);
+        mercado.getLinks().clear();
+        mercado.add(linkTo(MercadoApi.class).slash(idMercado).withSelfRel());
+        List<Portafolio> linkBuilder = methodOn(MercadoApiController.class).listarPortafolio(idMercado);
+        Link portafoliosLink = linkTo(linkBuilder).withRel("todosPortafolios");
+        mercado.add(portafoliosLink);
 
         //Headers
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -69,17 +64,18 @@ public class MercadoApiController implements MercadoApi {
     }
 
     public ResponseEntity<Void> eliminarMercado(@ApiParam(value = "Mercado a ser eliminado",required=true) @PathVariable("idMercado") String idMercado) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return Dominio.eliminarMercado(idMercado)?
+             new ResponseEntity<Void>(HttpStatus.OK)
+        :
+             new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
     }
 
     public @ResponseBody List<Portafolio> listarPortafolio(@PathVariable("idMercado") String idMercado){
-        List<Portafolio> lstResponse = Utiles.listaPortafolio()
-                .stream().filter(m -> m.getIdMercado().equals(idMercado))
-                .collect(Collectors.toList());
+        List<Portafolio> lstResponse = Dominio.listaPortafolios(idMercado);
 
         for(Portafolio portafolio:lstResponse){
-            Link portafolioLink = linkTo(Portafolio.class).slash("portafolio").slash(portafolio.getIdPortafolio()).withSelfRel();
+            portafolio.getLinks().clear();
+            Link portafolioLink = linkTo(PortafolioApi.class).slash(portafolio.getIdPortafolio()).withSelfRel();
             portafolio.add(portafolioLink);
         }
         return lstResponse;

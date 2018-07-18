@@ -1,8 +1,11 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.ResourceSupport;
@@ -27,6 +30,9 @@ public class Mercado  extends ResourceSupport {
 
   @JsonProperty("descripcion")
   private String descripcion = null;
+
+  @JsonIgnore
+  private List<Portafolio> portafolio = new ArrayList<>();
 
   public Mercado idMercado(String idMercado) {
     this.idMercado = idMercado;
