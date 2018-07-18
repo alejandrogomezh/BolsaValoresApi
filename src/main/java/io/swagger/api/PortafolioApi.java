@@ -43,7 +43,7 @@ public interface PortafolioApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Recurso obtenido", response = Object.class),
         @ApiResponse(code = 400, message = "Parámetro inválido") })
-    @RequestMapping(value = "/otro/{idPortafolio}",
+    @RequestMapping(value = "/{idPortafolio}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<Portafolio> buscarPortafolio(@ApiParam(value = "Id del portafolio a buscar",required=true) @PathVariable("idPortafolio") String idPortafolio);
@@ -73,8 +73,8 @@ public interface PortafolioApi {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "devolver el resultado obtenido", response = Object.class),
             @ApiResponse(code = 400, message = "parametro incorrecto") })
-    @RequestMapping(value = "/{valorInvertir}",
+    @RequestMapping(value = "/valorInvertir",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    List<Portafolio> consultarInversiones(@ApiParam(value = "valor a invertir",required=true) @PathVariable("valorInvertir") Integer valor);
+    List<Portafolio> consultarInversiones(@ApiParam(value = "valor a invertir",required=true) @RequestParam("valor") Integer valor);
 }

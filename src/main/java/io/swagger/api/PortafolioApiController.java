@@ -82,7 +82,7 @@ public class PortafolioApiController implements PortafolioApi {
         return lstResponse;
     }
 
-    public @ResponseBody List<Portafolio> consultarInversiones(@PathVariable("valor") Integer valor){
+    public @ResponseBody List<Portafolio> consultarInversiones(@RequestParam("valor") Integer valor){
         List<Portafolio> lstResponse = Dominio.buscarPortafolio(valor);
         for(Portafolio portafolio:lstResponse){
             portafolio.getLinks().clear();

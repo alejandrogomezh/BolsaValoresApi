@@ -111,7 +111,7 @@ public class Dominio {
                 .conCantidadAcciones(23)
                 .conEstado("Abierto")
                 .conRentabilidad(10)
-                .conValorAccion(100000)
+                .conValorAccion(200000)
                 .build());
         listaPortafolios.add(new PortafolioBuilder()
                 .conIdPortafolio("p3")
@@ -120,7 +120,7 @@ public class Dominio {
                 .conCantidadAcciones(23)
                 .conEstado("Abierto")
                 .conRentabilidad(10)
-                .conValorAccion(100000)
+                .conValorAccion(300000)
                 .build());
         listaPortafolios.add(new PortafolioBuilder()
                 .conIdPortafolio("p4")
@@ -129,20 +129,21 @@ public class Dominio {
                 .conCantidadAcciones(23)
                 .conEstado("Abierto")
                 .conRentabilidad(10)
-                .conValorAccion(100000)
+                .conValorAccion(400000)
                 .build());
     }
 
     public static List<Inversion> listaInversiones(String idPortafolio){
-        return listaInversiones()
-                .stream().filter(m -> m.getIdPortafolio().equals(idPortafolio))
+        return listaInversiones
+                .stream()
+                .filter(m -> m.getIdPortafolio().equals(idPortafolio))
                 .collect(Collectors.toList());
     }
 
     public static List<Portafolio> buscarPortafolio(Integer valor){
-
-        return listaPortafolios()
-                .stream().filter(m -> m.getValorAccion()<=valor)
+        return listaPortafolios
+                .stream()
+                .filter(m -> m.getValorAccion() <= valor)
                 .collect(Collectors.toList());
     }
 
@@ -213,7 +214,7 @@ public class Dominio {
 
     public static Mercado getMercado(String idMercado){
         try {
-            return listaMercados()
+            return listaMercados
                     .stream().filter(m -> m.getIdMercado().equals(idMercado))
                     .findFirst()
                     .get();
