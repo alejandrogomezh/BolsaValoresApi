@@ -69,7 +69,7 @@ public interface PortafolioApi {
 
 
 
-    @ApiOperation(value = "Buscar portafolio que se ajusten a la inversion", nickname = "consultarPortafolio", notes = " ", response = Object.class, tags={ "administrador","emisor",})
+    @ApiOperation(value = "Buscar portafolio que se ajusten a la inversion", nickname = "consultarPortafolio", notes = " ", response = Object.class, tags={ "administrador","emisor", "inversor",})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "devolver el resultado obtenido", response = Object.class),
             @ApiResponse(code = 400, message = "parametro incorrecto") })

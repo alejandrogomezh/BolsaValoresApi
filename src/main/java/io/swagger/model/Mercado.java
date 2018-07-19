@@ -118,6 +118,11 @@ public class Mercado  extends ResourceSupport {
     this.descripcion = descripcion;
   }
 
+  public List<Portafolio> getPortafolio() { return portafolio; }
+
+  public void setPortafolio(List<Portafolio> portafolio) {
+    this.portafolio = portafolio;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

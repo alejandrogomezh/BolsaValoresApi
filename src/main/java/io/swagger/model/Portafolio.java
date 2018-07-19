@@ -1,7 +1,10 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -36,6 +39,9 @@ public class Portafolio  extends ResourceSupport {
 
   @JsonProperty("estado")
   private String estado = null;
+
+  @JsonIgnore
+  private List<Inversion> inversion = new ArrayList<>();
 
   public Portafolio idPortafolio(String idPortafolio) {
     this.idPortafolio = idPortafolio;
@@ -184,6 +190,11 @@ public class Portafolio  extends ResourceSupport {
     this.estado = estado;
   }
 
+  public List<Inversion> getInversion() { return inversion; }
+
+  public void setInversion(List<Inversion> inversion) {
+    this.inversion = inversion;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
