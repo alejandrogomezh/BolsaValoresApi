@@ -1,6 +1,6 @@
 # Proyecto API REST 
 ## BOLSA DE VALORES API
-###### Integrandes
+###### Integrantes
 * Jhon Edier Carmona Garcia
 * David Leonardo Agudelo Villa
 * Alejandro Gomez Hurtado
